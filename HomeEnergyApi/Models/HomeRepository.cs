@@ -2,45 +2,49 @@ namespace HomeEnergyApi.Models
 {
     public class HomeRepository: IReadRepository<int, Home>, IWriteRepository<int, Home>
     {
-        public List<Home> HomesList;
+        private HomeDbContext context;
 
-        public HomeRepository()
+        public HomeRepository(HomeDbContext context)
         {
-            HomesList = new List<Home>();
+            this.context = context;
         }
 
         public Home Save(Home home)
         {
-            HomesList.Add(home);
+            context.Homes.Add(home);
+            context.SaveChanges();
             return home;
         }
 
         public Home Update(int id, Home home)
         {
-            HomesList[id] = home;
+            home.Id = id;
+            context.Homes.Update(home);
+            context.SaveChanges();
             return home;
         }
 
         public List<Home> FindAll()
         {
-            return HomesList;
+            return context.Homes.ToList();
         }
 
         public Home FindById(int id)
         {
-            return HomesList[id];
+            return context.Homes.Find(id);
         }
 
         public Home RemoveById(int id)
         {
-            var home = HomesList[id];
-            HomesList.Remove(home);
+            var home = context.Homes.Find(id);
+            context.Homes.Remove(home);
+            context.SaveChanges();
             return home;
         }
 
         public int Count()
         {
-            return HomesList.Count();
+            return context.Homes.Count();
         }
     }
 }

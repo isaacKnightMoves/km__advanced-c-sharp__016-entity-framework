@@ -3,6 +3,9 @@ namespace HomeEnergyApi.Models
 {
     public class Home
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         public string OwnerLastName { get; set; }
 
